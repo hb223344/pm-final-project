@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap · BU Pay & Credit · One clear view of what you owe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --ink:#16202B; --text:#2E3A47; --muted:#66727F; --line:#DDE2E8;
+  --qw:#1F7A4D; --qw-bg:#E2F3EA;
+  --mp:#2457A6; --mp-bg:#E3ECFA;
+  --fi:#8A5A00; --fi-bg:#FBF0D9;
+  --ts:#A3343F; --ts-bg:#F9E4E6;
+  --focus:#2457A6;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#10161D;--surface:#18212B;--ink:#EEF2F6;--text:#CBD4DD;--muted:#8D99A6;--line:#2A3642;
+    --qw:#6FD3A0;--qw-bg:#173A2A;--mp:#8DB4F2;--mp-bg:#1B2C47;--fi:#F0C46A;--fi-bg:#3A2D12;--ts:#F19AA3;--ts-bg:#40202A;
+    --focus:#8DB4F2;color-scheme:dark}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 "Albert Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:40px 24px 48px}
+h1,h2,h3{color:var(--ink);margin:0}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;align-items:flex-end;margin-bottom:24px}
+h1{font-size:clamp(26px,3.6vw,36px);line-height:1.15;font-weight:700}
+.meta{margin:6px 0 0;color:var(--muted)}
+.team{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px}
+.team b{display:block;font-weight:500;color:var(--ink)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.filters button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);font-weight:500}
+button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.lane{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-height:220px}
+.lane h2{font-size:20px;font-weight:700}
+.lane .when{color:var(--muted);font-size:13px;margin:0 0 14px}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:18px;color:var(--muted);font-size:14px;text-align:center}
+.card{width:100%;text-align:left;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px;cursor:pointer;display:block}
+.card:hover{border-color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card h3{font-size:16px;font-weight:500;line-height:1.3}
+.id{color:var(--muted);font-weight:400;margin-right:6px}
+.badge{flex:none;font-size:12px;font-weight:500;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.q-qw{color:var(--qw);background:var(--qw-bg)} .q-mp{color:var(--mp);background:var(--mp-bg)}
+.q-fi{color:var(--fi);background:var(--fi-bg)} .q-ts{color:var(--ts);background:var(--ts-bg)}
+.why{margin:8px 0 0;font-size:14px}
+.detail{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.card[aria-expanded="true"] .detail{display:flex;gap:18px}
+.detail b{color:var(--ink);font-weight:500}
+.hidden{display:none}
+.cut{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.cut h2{font-size:20px}
+.cut .when{color:var(--muted);font-size:13px;margin:2px 0 14px}
+.cutgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cutgrid .card{margin:0;opacity:.9}
+.cutgrid .card h3{text-decoration:line-through;text-decoration-color:var(--ts)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px;font-size:13px;color:var(--muted)}
+footer{margin-top:20px;font-size:12px;color:var(--muted)}
+@media (max-width:860px){.lanes,.cutgrid{grid-template-columns:1fr}}
+@media print{.filters{display:none}body{background:#fff}.lane,.cut{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>One clear view of what you owe</h1>
+      <p class="meta">BU Pay &amp; Credit · Riverty consumer card, Germany · Persona: Lena, heavy pay-later user</p>
+    </div>
+    <div class="team"><b>Team</b>1 squad: 6 engineers, 1 designer, 1 PM · 12 weeks</div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filter by quadrant">
+    <button type="button" data-f="all" aria-pressed="true">All features</button>
+    <button type="button" data-f="qw" aria-pressed="false">Quick Win</button>
+    <button type="button" data-f="mp" aria-pressed="false">Major Project</button>
+    <button type="button" data-f="fi" aria-pressed="false">Fill-In</button>
+    <button type="button" data-f="ts" aria-pressed="false">Time Sinker</button>
+  </div>
+
+  <section class="lanes" aria-label="Roadmap lanes">
+    <div class="lane"><h2>Now</h2><p class="when">This sprint</p><div data-lane="now"></div></div>
+    <div class="lane"><h2>Next</h2><p class="when">The following sprints</p><div data-lane="next"></div></div>
+    <div class="lane"><h2>Later</h2><p class="when">Backlog</p><div data-lane="later"></div></div>
+  </section>
+
+  <section class="cut" aria-label="Cut list">
+    <h2>Cut list</h2>
+    <p class="when">Scored and dropped for this initiative</p>
+    <div class="cutgrid" data-lane="cut"></div>
+  </section>
+
+  <div class="legend">
+    <span><span class="badge q-qw">Quick Win</span> high value, low effort</span>
+    <span><span class="badge q-mp">Major Project</span> high value, high effort</span>
+    <span><span class="badge q-fi">Fill-In</span> low value, low effort</span>
+    <span><span class="badge q-ts">Time Sinker</span> low value, high effort</span>
+  </div>
+  <footer>Select a card to see its value and effort scores. Evidence references (N-, T-) point to the practice data pack: sample data, illustrative, not Riverty research.</footer>
+</main>
+<script>
+const Q={qw:"Quick Win",mp:"Major Project",fi:"Fill-In",ts:"Time Sinker"};
+const F=[
+ {id:"B3",name:"One balance view",lane:"next",q:"mp",v:5,e:3,why:"Directly removes Lena’s moment of misery (N-07, T-103), and needs no terms change, just joining two data sources."},
+ {id:"B8",name:"One due date",lane:"next",q:"mp",v:5,e:5,why:"Fixes the mismatched reminders (T-104), but changing payment terms needs months of approval (N-11)."},
+ {id:"B1",name:"Decline reason and retry hint",lane:"later",q:"fi",v:2,e:2,why:"Real trust fix, but in-store declines hit heavy users least (12% in-store share)."},
+ {id:"B2",name:"Wallet from approval screen",lane:"later",q:"fi",v:2,e:2,why:"Fixes the wallet leak (T-102), but that’s an in-store problem, not Lena’s bill-tracking one."},
+ {id:"B4",name:"Pay now or later per purchase",lane:"cut",q:"ts",v:2,e:4,why:"Adds one more decision and more dates to track, the opposite of “one clear view,” and touches credit terms."},
+ {id:"B5",name:"Partner merchant offers",lane:"cut",q:"ts",v:2,e:3,why:"Protects the guardrail but doesn’t help Lena see what she owes, and needs merchant deals."},
+ {id:"B6",name:"Cashback",lane:"cut",q:"ts",v:1,e:4,why:"Drives trial, not retention (N-12), and pricing changes need approval."},
+ {id:"B7",name:"Physical card",lane:"cut",q:"ts",v:1,e:4,why:"Lena is phone-first, and cards mean manufacturing, logistics and delivery."}
+];
+function render(){
+  document.querySelectorAll("[data-lane]").forEach(el=>el.innerHTML="");
+  F.forEach(f=>{
+    const b=document.createElement("button");
+    b.type="button";b.className="card";b.dataset.q=f.q;b.setAttribute("aria-expanded","false");
+    b.innerHTML=`<div class="top"><h3><span class="id">${f.id}</span>${f.name}</h3><span class="badge q-${f.q}">${Q[f.q]}</span></div>
+      <p class="why">${f.why}</p>
+      <div class="detail"><span><b>Value</b> ${f.v} / 5</span><span><b>Effort</b> ${f.e} / 5</span></div>`;
+    b.addEventListener("click",()=>b.setAttribute("aria-expanded",b.getAttribute("aria-expanded")==="true"?"false":"true"));
+    document.querySelector(`[data-lane="${f.lane}"]`).appendChild(b);
+  });
+  const now=document.querySelector('[data-lane="now"]');
+  if(!now.children.length) now.innerHTML='<div class="empty">Nothing scheduled this sprint. No feature scored as a Quick Win.</div>';
+}
+function filter(k){
+  document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.f===k?"true":"false"));
+  document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hidden",k!=="all"&&c.dataset.q!==k));
+}
+document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("click",()=>filter(b.dataset.f)));
+render();
+</script>
+</body>
+</html>
