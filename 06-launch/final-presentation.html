@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Clear View · Final Project · Hrvoje Bakovic</title>
+<style>
+:root{
+  --bg:#07162C; --fg:#ffffff; --muted:#cbd5e1;
+  --orange:#fb923c; --cyan:#22d3ee; --teal:#34d399; --blue:#60a5fa; --violet:#a78bfa; --pink:#f472b6;
+  --eyebrow:#fdba74; --border:rgba(251,146,60,0.25);
+  --panel:rgba(255,255,255,0.035); --panel2:rgba(255,255,255,0.06);
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font:clamp(14px,1.05vw,17px)/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+section{min-height:100vh;scroll-snap-align:start;padding:7vh 6vw 6vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+section::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60vw 40vh at 85% 0%,rgba(251,146,60,0.08),transparent 70%),radial-gradient(50vw 40vh at 0% 100%,rgba(34,211,238,0.06),transparent 70%)}
+.wrap{position:relative;max-width:1320px;width:100%;margin:0 auto}
+h1,h2,h3,p{margin:0}
+h1{font-size:clamp(34px,4.6vw,66px);line-height:1.05;font-weight:700;letter-spacing:-0.02em;max-width:18ch}
+h2{font-size:clamp(26px,2.6vw,40px);line-height:1.1;font-weight:700;letter-spacing:-0.01em;margin:8px 0 22px}
+h3{font-size:clamp(15px,1.15vw,19px);font-weight:600;margin-bottom:8px}
+.eyebrow,.k{font-family:var(--mono);text-transform:uppercase;letter-spacing:0.12em;font-size:12px;color:var(--eyebrow)}
+.k{display:block;margin-bottom:6px}
+.muted{color:var(--muted)}
+.small{font-size:0.88em}
+.tiny{font-size:12px;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px 20px}
+.hero{background:linear-gradient(135deg,rgba(251,146,60,0.16),rgba(34,211,238,0.06) 60%,rgba(255,255,255,0.02));box-shadow:0 18px 44px rgba(0,0,0,0.38)}
+.shadow{box-shadow:0 14px 34px rgba(0,0,0,0.32)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stack{display:flex;flex-direction:column;gap:16px}
+ul,ol{margin:0;padding-left:1.15em}
+li{margin:3px 0}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;border-radius:999px;padding:5px 12px;border:1px solid var(--border);background:var(--panel2);color:var(--fg);margin:0 6px 6px 0}
+.pill.o{border-color:rgba(251,146,60,0.6);color:#fed7aa;background:rgba(251,146,60,0.12)}
+.pill.c{border-color:rgba(34,211,238,0.5);color:#a5f3fc;background:rgba(34,211,238,0.10)}
+.pill.t{border-color:rgba(52,211,153,0.5);color:#a7f3d0;background:rgba(52,211,153,0.10)}
+.pill.v{border-color:rgba(167,139,250,0.5);color:#ddd6fe;background:rgba(167,139,250,0.10)}
+.quote{border-left:3px solid var(--orange);padding:4px 0 4px 14px;font-size:1.05em}
+.callout{border:1px solid rgba(251,146,60,0.55);background:linear-gradient(135deg,rgba(251,146,60,0.18),rgba(244,114,182,0.06));border-radius:16px;padding:18px 22px;box-shadow:0 18px 44px rgba(0,0,0,0.38)}
+.num{font-family:var(--mono);font-weight:600}
+a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(34,211,238,0.35)}
+a:hover{border-bottom-color:var(--cyan)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:6px}
+
+/* cover */
+.cover h1{margin:18px 0 22px}
+.pitch{font-size:clamp(17px,1.5vw,23px);color:var(--muted);max-width:60ch;margin-bottom:34px}
+.meta{display:grid;grid-template-columns:repeat(3,auto);gap:14px 34px;justify-content:start}
+.meta .card{padding:14px 18px}
+
+/* journey */
+.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px;position:relative}
+.journey::before{content:"";position:absolute;left:4%;right:4%;top:15px;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--orange),var(--pink),var(--teal));opacity:.7}
+.step{position:relative;padding-top:34px}
+.step .dot{position:absolute;top:6px;left:0;width:20px;height:20px;border-radius:50%;background:var(--bg);border:2px solid var(--blue)}
+.step .card{padding:12px 14px;height:100%}
+.step.misery .dot{border-color:var(--orange);background:var(--orange);box-shadow:0 0 0 6px rgba(251,146,60,0.18)}
+.step.misery .card{border-color:rgba(251,146,60,0.7);background:linear-gradient(160deg,rgba(251,146,60,0.2),rgba(251,146,60,0.04))}
+.step.fix .dot{border-color:var(--teal);background:var(--teal)}
+.step.fix .card{border-color:rgba(52,211,153,0.55);background:linear-gradient(160deg,rgba(52,211,153,0.16),rgba(52,211,153,0.03))}
+.step.scan .dot{border-color:var(--teal)}
+
+/* roadmap */
+.lanes{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:14px}
+.lane{border-radius:16px;padding:16px 18px;border:1px solid var(--border);background:var(--panel)}
+.lane.now{background:linear-gradient(160deg,rgba(251,146,60,0.18),rgba(255,255,255,0.02));box-shadow:0 14px 34px rgba(0,0,0,0.32)}
+.lane .tag{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;display:block}
+.lane.now .tag{color:var(--orange)} .lane.next .tag{color:var(--cyan)} .lane.later .tag{color:var(--blue)} .lane.cut .tag{color:var(--pink)}
+.lane.cut li{text-decoration:line-through;text-decoration-color:rgba(244,114,182,0.6)}
+.mosc{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:0.9em;margin-top:8px}
+.mosc b{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;padding-top:3px}
+
+/* validation */
+.tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.tile{border:1px solid var(--border);background:var(--panel);border-radius:14px;padding:12px 14px}
+.tile .v{font-family:var(--mono);font-size:clamp(18px,1.6vw,26px);font-weight:600;line-height:1.2}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.rule{border-radius:14px;padding:12px 14px;border:1px solid}
+.rule.ship{border-color:rgba(52,211,153,0.55);background:rgba(52,211,153,0.08)}
+.rule.iter{border-color:rgba(96,165,250,0.55);background:rgba(96,165,250,0.08)}
+.rule.kill{border-color:rgba(244,114,182,0.55);background:rgba(244,114,182,0.08)}
+.rule b{font-family:var(--mono);letter-spacing:0.1em;font-size:12px;display:block;margin-bottom:4px}
+.rule.ship b{color:var(--teal)} .rule.iter b{color:var(--blue)} .rule.kill b{color:var(--pink)}
+
+/* launch */
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.phase{border-top:2px solid var(--cyan);padding-top:8px}
+.phase:nth-child(2){border-color:var(--orange)} .phase:nth-child(3){border-color:var(--teal)}
+.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.metric{border:1px solid var(--border);border-radius:14px;padding:14px;background:var(--panel)}
+.metric .v{font-family:var(--mono);font-size:clamp(18px,1.7vw,28px);font-weight:600;line-height:1.15;margin:2px 0 6px}
+.metric.r .v{color:var(--teal)} .metric.cp .v{color:var(--cyan)} .metric.cl .v{color:var(--violet)} .metric.gr .v{color:var(--eyebrow)}
+
+/* thanks */
+.thanks{text-align:center;align-items:center}
+.thanks h1{max-width:none;margin:16px auto 18px}
+.submit{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:14px;letter-spacing:0.06em;border-radius:999px;padding:12px 22px;background:linear-gradient(135deg,var(--orange),#f97316);color:#07162C;font-weight:700;box-shadow:0 16px 40px rgba(251,146,60,0.35);margin-top:26px}
+
+.foot{position:absolute;bottom:2.4vh;left:6vw;right:6vw;display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:rgba(203,213,225,0.6);pointer-events:none}
+
+/* chrome */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--pink));z-index:20}
+#dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:20}
+#dots button{width:11px;height:11px;border-radius:50%;border:1px solid rgba(251,146,60,0.6);background:transparent;padding:0;cursor:pointer;transition:all .2s}
+#dots button[aria-current="true"]{background:var(--orange);transform:scale(1.25)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (max-width:1000px){
+  .g2,.g3,.g4,.lanes,.journey,.rules,.phases,.dash,.meta{grid-template-columns:1fr}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .journey::before{display:none}
+  section{padding:9vh 7vw 9vh}
+  #dots{right:8px}
+  .foot{position:static;margin-top:24px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#dots button{transition:none}}
+</style>
+</head>
+<body>
+<div id="progress" aria-hidden="true"></div>
+<nav id="dots" aria-label="Slides"></nav>
+
+<!-- 1 · COVER -->
+<section id="cover" class="cover" data-title="Cover">
+  <div class="wrap">
+    <span class="eyebrow">Final project · Riverty BU Pay &amp; Credit · First Consumer Card</span>
+    <h1>One Clear View: helping Lena keep using her Riverty card after the first bill</h1>
+    <p class="pitch">One Riverty screen that shows everything Lena owes on her card and pay-later orders, with clear due dates, so payday never brings surprises.</p>
+    <div class="meta">
+      <div class="card"><span class="k">Name / cohort</span>Hrvoje Bakovic, Riverty cohort 2</div>
+      <div class="card"><span class="k">Repo</span><a href="https://github.com/hb223344/pm-final-project">github.com/hb223344/pm-final-project</a></div>
+      <div class="card"><span class="k">Prototype</span><span class="num">04-roadmap/prototype.html</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Product School · PM Certification</span><span>Sample data, illustrative, not Riverty research</span></div>
+</section>
+
+<!-- 2 · STRATEGY -->
+<section id="strategy" data-title="Strategy">
+  <div class="wrap">
+    <span class="eyebrow">Slide 5 · Strategy</span>
+    <h2>Stop being one more swappable option</h2>
+    <div class="g2" style="margin-bottom:16px">
+      <div class="card hero">
+        <span class="k">Problem hook</span>
+        <p style="font-size:1.12em">We must stop Riverty from being just one more swappable option at checkout, by fixing consumers’ stress of tracking scattered pay-later bills and not being able to pay later in store.</p>
+        <p class="tiny" style="margin-top:12px">Case: BU Pay &amp; Credit, Riverty’s First Consumer Card · Persona: Lena, 32, heavy pay-later user</p>
+      </div>
+      <div class="card">
+        <span class="k">Value proposition</span>
+        <p style="font-size:1.08em;margin-bottom:10px">One Riverty screen that shows everything Lena owes on her card and her pay-later orders, with each due date clearly listed, so payday never brings surprises.</p>
+        <p class="small muted"><b style="color:var(--fg)">Why now:</b> Klarna and PayPal are already in Lena’s wallet, and activity drops right after the first bill (<span class="num">77.6% → 66.3% → 51.0%</span>). If Riverty stays one more app to check, it stays easy to swap out.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="k">Data-backed hypothesis</span>
+      <p style="font-size:1.05em">I believe that B3, one balance view for card and pay-later orders, for heavy pay-later users like Lena, will keep them using the card after their first bill arrives. I’ll measure this as a +5 percentage point increase in the share of heavy users who make at least one purchase in the month after their first bill (baseline 66.3%), within 12 weeks, with a 50/50 split at p &lt; 0.05. We will protect partner merchant share of card volume (no more than 3 points below control) and on-time repayment (no more than 2 points below control).</p>
+      <div style="margin-top:12px">
+        <span class="pill o">Qual · “I could not see in one place what I owe on the card and what I owe on my normal pay later orders.” (N-07)</span>
+        <span class="pill c">Quant · 77.6% → 66.3% → 51.0% active after first bill</span>
+        <span class="pill v">Heavy users: 25.4% instalments vs 6.0% light</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>M1 · M3</span><span>Sample data, illustrative, not Riverty research</span></div>
+</section>
+
+<!-- 3 · RESEARCH -->
+<section id="research" data-title="Research">
+  <div class="wrap">
+    <span class="eyebrow">Slide 6 · Research</span>
+    <h2>Today, Lena does the maths herself</h2>
+    <div class="g2">
+      <div class="card">
+        <span class="k">Workaround &amp; competitive set</span>
+        <div style="margin-bottom:10px">
+          <span class="pill">Klarna app</span><span class="pill">PayPal app</span><span class="pill o">Riverty app · 2 screens</span><span class="pill">Bank app (assumed)</span><span class="pill">Reminder emails / texts</span>
+        </div>
+        <ol class="small">
+          <li>Before payday, she opens each pay-later app to see what’s due.</li>
+          <li>In the Riverty app, she checks the card balance, then the pay-later orders, and adds them up in her head.</li>
+          <li>She compares two reminders from the same week to work out what’s due when.</li>
+          <li>When the numbers don’t match, she asks support which total is the real one.</li>
+        </ol>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <span class="k">Core frustration</span>
+          <p>The moment she sees two different totals in the Riverty app and two reminders in the same week for different amounts, and can’t tell what she actually owes.</p>
+        </div>
+        <div class="card">
+          <span class="k">Evidence</span>
+          <p class="quote">“I could not see in one place what I owe on the card and what I owe on my normal pay later orders.” (N-07)</p>
+          <p class="tiny" style="margin-top:8px">Backed by ticket T-103: participants ask which total is the real one.</p>
+        </div>
+      </div>
+    </div>
+    <div class="journey" aria-label="Journey map: key moments">
+      <div class="step"><span class="dot"></span><div class="card"><span class="k">Open</span><p class="small">Before payday, Lena opens the Riverty app to check what she owes.</p></div></div>
+      <div class="step scan"><span class="dot"></span><div class="card"><span class="k">Scan</span><p class="small">She sees her card balance on one screen and her pay-later orders on another, and tries to add them up in her head.</p></div></div>
+      <div class="step"><span class="dot"></span><div class="card"><span class="k">Hesitate</span><p class="small">Two reminders arrive in the same week for different amounts (T-104). She can’t tell which total is the real one (N-07, T-103).</p></div></div>
+      <div class="step misery"><span class="dot"></span><div class="card"><span class="k" style="color:var(--orange)">Bounce · moment of misery</span><p class="small">She gives up, asks support, or checks her other pay-later apps. The card becomes one more thing to check (N-02), and she slowly stops using it after her first bill.</p></div></div>
+      <div class="step fix"><span class="dot"></span><div class="card"><span class="k" style="color:var(--teal)">Solution intervenes · at Scan</span><p class="small">One Balance View shows one total, every item with its due date, and the next payment at the top. No adding up, no guessing.</p></div></div>
+    </div>
+  </div>
+  <div class="foot"><span>M2 · Journey map file: lena-future-state-journey.html</span><span>N-02 · N-07 · T-103 · T-104 · sample data</span></div>
+</section>
+
+<!-- 4 · BLUEPRINT -->
+<section id="blueprint" data-title="Blueprint">
+  <div class="wrap">
+    <span class="eyebrow">Slide 7 · Blueprint</span>
+    <h2>V1 is one screen, and nothing else</h2>
+    <div class="lanes" style="margin-bottom:16px">
+      <div class="lane now">
+        <span class="tag">Now · V1</span>
+        <h3>B3 One Balance View</h3>
+        <div class="mosc">
+          <b style="color:var(--orange)">Must</b><span>One total (card + pay-later), list of every item with shop, amount, due date and type, next payment at the top, total updates right after a payment</span>
+          <b style="color:var(--cyan)">Should</b><span>“Due this week” grouping, last-updated time, item details, pay from the list</span>
+          <b style="color:var(--pink)">Won’t</b><span>One due date (B8), Klarna/PayPal orders, reminder changes</span>
+        </div>
+      </div>
+      <div class="lane next">
+        <span class="tag">Next</span>
+        <h3>B8 One due date</h3>
+        <p class="small muted">Fixes the double reminders (T-104), but changing payment terms needs months of approval (N-11). Start the approval now.</p>
+      </div>
+      <div class="lane later">
+        <span class="tag">Later</span>
+        <ul class="small"><li>B1 Decline reason and retry hint</li><li>B2 Add to phone wallet from the approval screen</li></ul>
+        <p class="tiny" style="margin-top:6px">Real fixes, but mainly for in-store users, not Lena’s bill-tracking pain.</p>
+      </div>
+      <div class="lane cut">
+        <span class="tag">Cut</span>
+        <ul class="small"><li>B4 Pay now or later per purchase</li><li>B5 Partner merchant offers</li><li>B6 Cashback</li><li>B7 Physical card</li></ul>
+        <p class="tiny" style="margin-top:6px">They don’t help Lena see what she owes, and some need pricing or terms approval.</p>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="card">
+        <span class="k">PRD · finalized Must-Haves</span>
+        <ul class="small">
+          <li>One total owed, combining the card balance and all Riverty pay-later orders</li>
+          <li>Every unpaid item with shop, amount, due date and a “Card” or “Pay later” label</li>
+          <li>The next due date and amount shown at the top</li>
+          <li>Total and next due date update right away when an item is paid</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="k">PRD · made explicit</span>
+        <p class="small">The total has to match the item list to the cent, and if it doesn’t, the app shows an error instead of a wrong number. A wrong total is exactly Lena’s moment of misery.</p>
+      </div>
+      <div class="card">
+        <span class="k">Prototype · revealed a gap</span>
+        <p class="small">The PRD never said how card purchases get paid. New rule: card items are paid together as one statement, and pay-later orders are paid one by one.</p>
+        <p style="margin-top:10px"><span class="pill t">Prototype · 04-roadmap/prototype.html</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>M4 · Now / Next / Later + MoSCoW</span><span>Sample data, illustrative, not Riverty research</span></div>
+</section>
+
+<!-- 5 · VALIDATION -->
+<section id="validation" data-title="Validation">
+  <div class="wrap">
+    <span class="eyebrow">Slide 8 · Validation</span>
+    <h2>One change, one number, one read date</h2>
+    <div class="card hero" style="margin-bottom:14px">
+      <span class="k">Hypothesis</span>
+      <p>I believe that B3, one balance view for card and pay-later orders, for heavy pay-later users like Lena, will keep them using the card after their first bill arrives, measured as a +5 percentage point increase in the share of heavy users who make at least one purchase in the month after their first bill.</p>
+    </div>
+    <div class="g2" style="margin-bottom:14px">
+      <div class="card"><span class="k">Control (A)</span><p class="small">Today’s app. The card balance and regular pay-later orders are on two separate screens, and Lena has to open both and add the totals herself.</p></div>
+      <div class="card" style="border-color:rgba(52,211,153,0.5)"><span class="k" style="color:var(--teal)">Variant (B) · exactly one change</span><p class="small">One screen showing a single total owed (card plus pay-later orders), a list of each item with its amount and due date, and the next due date highlighted at the top.</p></div>
+    </div>
+    <div class="tiles" style="margin-bottom:14px">
+      <div class="tile" style="grid-column:span 2"><span class="k">Primary metric</span><p class="small">Share of heavy users who make at least one purchase in the month after their first bill</p></div>
+      <div class="tile"><span class="k">Baseline</span><div class="v">66.3%</div></div>
+      <div class="tile"><span class="k">MDE</span><div class="v">+5 pts</div></div>
+      <div class="tile"><span class="k">Sample / arm</span><div class="v">1,347</div></div>
+      <div class="tile"><span class="k">Split · sig.</span><div class="v">50/50</div><span class="tiny">p &lt; 0.05 · 80% power</span></div>
+    </div>
+    <div class="g2" style="grid-template-columns:1fr 2fr">
+      <div class="card"><span class="k">Guardrails</span>
+        <ul class="small"><li>Partner merchant share of card volume (baseline 63.1%): no more than 3 points below control</li><li>On-time repayment: no more than 2 points below control</li></ul>
+      </div>
+      <div>
+        <div class="rules">
+          <div class="rule ship"><b>SHIP</b><span class="small">Primary metric higher in B than A with p &lt; 0.05, an observed lift of at least +3 points, and no guardrail breached.</span></div>
+          <div class="rule iter"><b>ITERATE</b><span class="small">Lift is positive but not significant or below +3 points, with no guardrail breached.</span></div>
+          <div class="rule kill"><b>KILL</b><span class="small">Lift is zero or negative, or any guardrail is breached, whatever the primary result.</span></div>
+        </div>
+        <p class="tiny" style="margin-top:8px">We read results once, at the end of week 12. The only early check is in week 1, to confirm the split is close to 50/50 and tracking works.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>M5 · A/B experiment brief</span><span>Sample data, illustrative, not Riverty research</span></div>
+</section>
+
+<!-- 6 · LAUNCH -->
+<section id="launch" data-title="Launch">
+  <div class="wrap">
+    <span class="eyebrow">Slide 9 · Launch</span>
+    <h2>A targeted launch inside the product</h2>
+    <div class="g2" style="grid-template-columns:1fr 1.25fr;margin-bottom:14px">
+      <div class="card">
+        <span class="k">GTM strategy</span>
+        <p style="margin-bottom:8px"><span class="pill o">Goal · Engagement</span><span class="pill c">Tier · M (targeted)</span><span class="pill t">No paid media</span></p>
+        <p class="small"><b>Audience:</b> new heavy-user card holders (4+ pay-later orders a month), from activation through the month after their first bill. About 15,000 in year 1, around 290 a week (assumed). Secondary: all other card holders, with no targeted messages.</p>
+      </div>
+      <div class="card">
+        <span class="k">Channels · all owned</span>
+        <p><span class="pill v">1 · Reminder line in existing push &amp; email</span><span class="pill v">2 · In-app message on Home</span><span class="pill v">3 · Help article “Your total, explained”</span></p>
+        <div class="phases" style="margin-top:8px">
+          <div class="phase"><span class="k" style="color:var(--cyan)">Phase 1 · wk 1–18</span><p class="tiny">A/B test, 50/50 on new heavy users. Assets and Compliance sign-off by week 16.</p></div>
+          <div class="phase"><span class="k">Phase 2 · wk 19–20</span><p class="tiny">Ship decision, roll out 25% → 50% → 95%, keep a 5% holdout.</p></div>
+          <div class="phase"><span class="k" style="color:var(--teal)">Phase 3 · wk 21–30</span><p class="tiny">Weekly checks, 24-hour rollback rule, final decision at week 30.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="dash" style="margin-bottom:14px">
+      <div class="metric r shadow"><span class="k">Retention</span><div class="v">66.3% → 71.3%</div><p class="tiny">Heavy users still buying in the month after their first bill, vs a 5% holdout</p></div>
+      <div class="metric cp"><span class="k">Check-and-pay</span><div class="v">Baseline TBD</div><p class="tiny">Card holders who check One Balance View before a due date, then pay on time</p></div>
+      <div class="metric cl"><span class="k">Clarity</span><div class="v">↓ per 1,000</div><p class="tiny">“Which total is real?” support contacts per 1,000 active cards. Baseline TBD</p></div>
+      <div class="metric gr"><span class="k">Guardrail</span><div class="v">≥ 63.1%</div><p class="tiny">Partner merchant share of card volume, and on-time repayment does not drop</p></div>
+    </div>
+    <div class="callout">
+      <span class="k">Bad signal</span>
+      <div class="g2" style="gap:14px">
+        <p class="small"><b>Early, week 1:</b> support contacts are not falling, the error state (“total doesn’t match items”) shows in more than 0.1% of sessions, or reminder opt-outs go up.</p>
+        <p class="small"><b>Later:</b> people check the view but retention doesn’t lift. Lena sees the total but still drifts away, so the real blocker is something else, like declines or habit.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>M6 · GTM launch plan · likely decision: iterate → B8</span><span>Sample data, illustrative, not Riverty research</span></div>
+</section>
+
+<!-- 7 · STORY -->
+<section id="story" data-title="Story">
+  <div class="wrap">
+    <span class="eyebrow">Slide 10 · Story</span>
+    <h2>What I learned along the way</h2>
+    <div class="g3" style="margin-bottom:16px">
+      <div class="card"><span class="k">What was hard</span><p class="small">Being ruthless. Every feature felt important until I asked one question: can Lena still see what she owes without it? Cutting B4 hurt, because it was part of my own value proposition.</p></div>
+      <div class="card"><span class="k">What surprised me</span><p class="small">How often the AI sounded right while being wrong. It turned one merchant quote into “all merchants” and made up a cause-and-effect. I had to check its work against the data every time.</p></div>
+      <div class="card hero"><span class="k" style="color:var(--orange)">The aha moment</span><p class="small">When the numbers met the interviews. Lena’s frustration was real, but the data showed when it matters: right after the first bill. That turned a general complaint into a clear problem of keeping users, not winning them.</p></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <span class="k">Key takeaways</span>
+        <ul class="small">
+          <li>Start with one person and one moment, not a feature list.</li>
+          <li>Building a quick prototype finds gaps that writing a PRD misses. Mine showed I never defined how card payments actually work.</li>
+          <li>Run the maths early. My test needs about 2,700 new heavy users, so it can’t run in the pilot.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="k">What I’d do next</span>
+        <ul class="small">
+          <li>Talk to 5–8 real heavy users (not colleagues) to check the first-bill drop-off.</li>
+          <li>Set the missing baselines: heavy-user retention and “which total?” support tickets.</li>
+          <li>Start the approval process for B8 (one due date) now, since it takes months.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>06-launch/individual-insights.md</span><span>Hrvoje Bakovic · Riverty cohort 2</span></div>
+</section>
+
+<!-- 8 · THANK YOU -->
+<section id="thanks" class="thanks" data-title="Thank you">
+  <div class="wrap">
+    <span class="eyebrow">Thank you</span>
+    <h1>One screen. One total. No payday surprises.</h1>
+    <p class="pitch" style="margin:0 auto 22px">Repo: <a href="https://github.com/hb223344/pm-final-project">github.com/hb223344/pm-final-project</a></p>
+    <p><span class="pill o">Riverty cohort 2</span><span class="pill c">BU Pay &amp; Credit</span><span class="pill t">Deck · 06-launch/final-presentation.html</span></p>
+    <div class="submit">Submit to the learning platform →</div>
+    <p class="tiny" style="margin-top:28px">All case figures come from the practice data pack. Sample data, illustrative, not Riverty research.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  const secs=[...document.querySelectorAll('section')];
+  const dots=document.getElementById('dots');
+  const bar=document.getElementById('progress');
+  let cur=0;
+  secs.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.setAttribute('aria-label',`Go to slide ${i+1}: ${s.dataset.title}`);
+    b.addEventListener('click',()=>go(i));
+    dots.appendChild(b);
+  });
+  const btns=[...dots.children];
+  function mark(i){cur=i;btns.forEach((b,j)=>b.setAttribute('aria-current',j===i?'true':'false'));}
+  function go(i){i=Math.max(0,Math.min(secs.length-1,i));secs[i].scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});mark(i);}
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>0.5)mark(secs.indexOf(e.target));});},{threshold:[0.5]});
+  secs.forEach(s=>io.observe(s));
+  function prog(){const h=document.documentElement;const max=h.scrollHeight-h.clientHeight;bar.style.width=(max>0?(h.scrollTop/max)*100:0)+'%';}
+  addEventListener('scroll',prog,{passive:true});addEventListener('resize',prog);prog();mark(0);
+  addEventListener('keydown',e=>{
+    if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+    switch(e.key){
+      case 'ArrowDown':case 'PageDown':e.preventDefault();go(cur+1);break;
+      case ' ':e.preventDefault();go(e.shiftKey?cur-1:cur+1);break;
+      case 'ArrowUp':case 'PageUp':e.preventDefault();go(cur-1);break;
+      case 'Home':e.preventDefault();go(0);break;
+      case 'End':e.preventDefault();go(secs.length-1);break;
+      case 'Escape':if(document.activeElement)document.activeElement.blur();go(0);break;
+    }
+  });
+})();
+</script>
+</body>
+</html>
