@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Balance View · prototype</title>
+<style>
+:root{
+  --bg:#EEF1F4; --phone:#FFFFFF; --ink:#141C24; --text:#33404C; --muted:#6A7682; --line:#E0E5EA;
+  --brand:#1E6B5A; --brand-ink:#FFFFFF; --soft:#E6F2EE;
+  --red:#B3261E; --red-bg:#FBE9E7; --amber:#8A5A00; --amber-bg:#FCF1D8;
+  --card:#2457A6; --card-bg:#E5EDFA; --bnpl:#6A3FA0; --bnpl-bg:#F0E9F8;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0D1217;--phone:#161E26;--ink:#EEF2F6;--text:#CAD3DC;--muted:#8E9AA6;--line:#26313C;
+    --brand:#5CC2A6;--brand-ink:#0D1217;--soft:#17332C;--red:#F2A39C;--red-bg:#3F1D1B;--amber:#F0C46A;--amber-bg:#3A2D12;
+    --card:#8DB4F2;--card-bg:#1C2B44;--bnpl:#C6A6EE;--bnpl-bg:#2C2240;color-scheme:dark}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column;align-items:center;padding:24px 12px}
+.phone{width:100%;max-width:400px;min-height:700px;background:var(--phone);border:1px solid var(--line);border-radius:28px;overflow:hidden;display:flex;flex-direction:column}
+.bar{display:flex;align-items:center;gap:10px;padding:18px 20px 10px}
+.bar .brand{font-weight:700;color:var(--brand);letter-spacing:.2px}
+.bar button{margin-left:auto}
+section{padding:6px 20px 24px;flex:1}
+section[hidden]{display:none}
+h1,h2{color:var(--ink);margin:0;outline:none}
+h1{font-size:15px;font-weight:500;color:var(--muted)}
+h2{font-size:22px;font-weight:700;margin-bottom:12px}
+.total{font-size:42px;font-weight:700;color:var(--ink);line-height:1.1;margin:4px 0 6px;font-variant-numeric:tabular-nums}
+.split{display:flex;gap:16px;font-size:13px;color:var(--muted);margin-bottom:4px}
+.updated{font-size:12px;color:var(--muted);margin:0 0 18px}
+.banner{background:var(--soft);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.banner b{display:block;font-size:13px;font-weight:500;color:var(--brand)}
+.banner .amt{font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.banner .sub{font-size:13px;color:var(--text)}
+.alert{background:var(--red-bg);color:var(--red);border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:12px}
+.error{background:var(--red-bg);color:var(--red);border-radius:14px;padding:16px;margin:8px 0 18px}
+.error b{display:block;font-size:16px;margin-bottom:4px}
+.clear{background:var(--soft);border-radius:14px;padding:16px;margin-bottom:12px;color:var(--ink)}
+.btn{font:inherit;font-weight:500;border:0;border-radius:12px;padding:13px 16px;width:100%;cursor:pointer;background:var(--brand);color:var(--brand-ink)}
+.btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--line);width:auto;padding:8px 12px;font-size:14px}
+.btn.small{width:auto;padding:7px 14px;font-size:14px}
+button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.summary{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:6px}
+.summary .t{font-size:26px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.summary .n{font-size:13px;color:var(--muted);text-align:right}
+.group{padding-top:14px}
+.ghead{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+.ghead .combo{color:var(--ink);font-weight:500}
+.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.item .info{flex:1;min-width:0}
+.item .shop{color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px}
+.tag{font-size:11px;font-weight:500;border-radius:999px;padding:1px 8px}
+.t-card{color:var(--card);background:var(--card-bg)} .t-bnpl{color:var(--bnpl);background:var(--bnpl-bg)}
+.t-over{color:var(--red);background:var(--red-bg)} .t-soon{color:var(--amber);background:var(--amber-bg)}
+.item .amt{font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.done{text-align:center;padding-top:30px}
+.done svg{width:64px;height:64px;color:var(--brand)}
+.done .paid{font-size:20px;font-weight:700;color:var(--ink);margin:12px 0 22px}
+.kv{text-align:left;background:var(--bg);border-radius:14px;padding:14px 16px;margin-bottom:20px}
+.kv div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
+.kv span:last-child{color:var(--ink);font-weight:500;text-align:right}
+.controls{max-width:400px;width:100%;margin-top:16px;font-size:12px;color:var(--muted);text-align:center}
+.controls button{font:inherit;font-size:12px;background:none;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:5px 10px;margin:4px;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="bar"><span class="brand">Riverty</span><button class="btn ghost" id="backBtn" hidden>← Overview</button></div>
+
+  <!-- Screen 1: Home -->
+  <section id="home" aria-labelledby="homeH">
+    <h1 id="homeH" tabindex="-1">You owe in total</h1>
+    <div id="homeTotal" aria-live="polite"></div>
+    <div id="homeNext"></div>
+    <button class="btn" id="seeAll">See everything</button>
+  </section>
+
+  <!-- Screen 2: Core -->
+  <section id="core" aria-labelledby="coreH" hidden>
+    <h2 id="coreH" tabindex="-1">Everything you owe</h2>
+    <div id="coreSummary" aria-live="polite"></div>
+    <div id="coreList"></div>
+  </section>
+
+  <!-- Screen 3: Confirmation -->
+  <section id="confirm" aria-labelledby="confH" hidden>
+    <div class="done">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg>
+      <h2 id="confH" class="paid" tabindex="-1"></h2>
+      <div class="kv" id="confKv"></div>
+      <button class="btn" id="toHome">Back to overview</button>
+    </div>
+  </section>
+</div>
+
+<div class="controls">
+  Prototype controls ·
+  <button type="button" id="reset">Reset sample data</button>
+  <button type="button" id="mismatch">Simulate total mismatch</button>
+  <div>Fictional sample data. Payments are simulated. No network calls.</div>
+</div>
+
+<script>
+const DAY = 86400000;
+const today = new Date(); today.setHours(0,0,0,0);
+const eur = new Intl.NumberFormat('de-DE', {style:'currency', currency:'EUR'});
+const fmtDate = new Intl.DateTimeFormat('en-GB', {weekday:'short', day:'numeric', month:'short'});
+const fmtTime = new Intl.DateTimeFormat('en-GB', {hour:'2-digit', minute:'2-digit'});
+const money = c => eur.format(c / 100);
+const dateOf = off => fmtDate.format(new Date(today.getTime() + off * DAY));
+
+// Fictional sample data: card purchases are due on the statement date (+6 days),
+// pay-later orders keep their own due dates. Amounts in cents.
+const seed = () => [
+  {id:'c1', shop:'Frischmarkt',      src:'card', cents:6420,  off:6},
+  {id:'c2', shop:'Drogerie Lind',    src:'card', cents:1875,  off:6},
+  {id:'c3', shop:'Bäckerei Schmidt', src:'card', cents:460,   off:6},
+  {id:'p1', shop:'Elektro Hansen',   src:'bnpl', cents:24900, off:-2},
+  {id:'p2', shop:'Wohnhaus Möbel',   src:'bnpl', cents:13450, off:2},
+  {id:'p3', shop:'Modehaus Berg',    src:'bnpl', cents:8995,  off:6},
+  {id:'p4', shop:'Parfümerie Rose',  src:'bnpl', cents:4230,  off:12},
+  {id:'p5', shop:'Versand Kaiser',   src:'bnpl', cents:5999,  off:19}
+].map(i => ({...i, paid:false}));
+
+let S;
+function init(){
+  const items = seed();
+  S = {items, ledger: items.reduce((a,i)=>a+i.cents,0), updated:new Date(), lastPaid:null};
+}
+
+const unpaid = () => S.items.filter(i=>!i.paid)
+  .sort((a,b)=> a.off-b.off || (a.src===b.src?0:a.src==='card'?-1:1) || a.shop.localeCompare(b.shop));
+const sum = list => list.reduce((a,i)=>a+i.cents,0);
+const totalOk = () => S.ledger === sum(unpaid());   // FR1 + safety guard
+function nextDue(){
+  const u = unpaid(); if(!u.length) return null;
+  const items = u.filter(i=>i.off===u[0].off);
+  return {off:u[0].off, items, cents:sum(items)};
+}
+function rel(off){
+  if(off<0) return `${-off} day${off===-1?'':'s'} overdue`;
+  if(off===0) return 'due today';
+  return `in ${off} day${off===1?'':'s'}`;
+}
+function statusTag(off){
+  if(off<0) return '<span class="tag t-over">Overdue</span>';
+  if(off<=3) return '<span class="tag t-soon">Due soon</span>';
+  return '';
+}
+const srcTag = s => s==='card' ? '<span class="tag t-card">Card</span>' : '<span class="tag t-bnpl">Pay later</span>';
+const errorBox = () => `<div class="error" role="alert"><b>We can’t show your total right now</b>The numbers don’t add up, so we won’t show one until they do. Nothing has been charged.</div>`;
+
+function nextHTML(){
+  const n = nextDue();
+  if(!n) return `<div class="clear"><b>You’re all clear.</b> Nothing to pay right now.</div>`;
+  const mixed = new Set(n.items.map(i=>i.src)).size > 1;
+  const many = n.items.length > 1
+    ? `${n.items.length} items${mixed ? ', card and pay later combined' : ''}`
+    : n.items[0].shop;
+  return `<div class="banner"><b>Next payment</b><div class="amt">${money(n.cents)}</div>
+    <div class="sub">${dateOf(n.off)} · ${rel(n.off)} · ${many}</div></div>`;
+}
+
+function renderHome(){
+  const u = unpaid();
+  const over = u.filter(i=>i.off<0);
+  const t = document.getElementById('homeTotal');
+  if(!totalOk()){ t.innerHTML = errorBox(); }
+  else {
+    t.innerHTML = `<div class="total">${money(sum(u))}</div>
+      <div class="split"><span>Card ${money(sum(u.filter(i=>i.src==='card')))}</span><span>Pay later ${money(sum(u.filter(i=>i.src==='bnpl')))}</span></div>
+      <p class="updated">Updated ${fmtTime.format(S.updated)}</p>`;
+  }
+  document.getElementById('homeNext').innerHTML =
+    (over.length ? `<div class="alert">${over.length} overdue · ${money(sum(over))}</div>` : '') + nextHTML();
+  document.getElementById('seeAll').hidden = !u.length;
+}
+
+function renderCore(){
+  const u = unpaid();
+  const n = nextDue();
+  document.getElementById('coreSummary').innerHTML = totalOk()
+    ? `<div class="summary"><div><div style="font-size:13px;color:var(--muted)">Total owed</div><div class="t">${money(sum(u))}</div></div>
+       <div class="n">${n ? `Next: ${money(n.cents)}<br>${dateOf(n.off)}` : 'Nothing due'}</div></div>`
+    : errorBox();
+  const list = document.getElementById('coreList');
+  if(!u.length){ list.innerHTML = `<div class="clear" style="margin-top:14px"><b>You’re all clear.</b> No open card purchases or pay-later orders.</div>`; return; }
+  const groups = [];
+  u.forEach(i=>{ const g = groups.find(g=>g.off===i.off); g ? g.items.push(i) : groups.push({off:i.off, items:[i]}); });
+  list.innerHTML = groups.map(g=>`
+    <div class="group" role="group" aria-label="Due ${dateOf(g.off)}">
+      <div class="ghead"><span>${dateOf(g.off)} · ${rel(g.off)}</span>
+        ${g.items.length>1 ? `<span class="combo">${money(sum(g.items))} this day</span>` : ''}</div>
+      ${g.items.map(i=>`
+        <div class="item">
+          <div class="info"><div class="shop">${i.shop}</div><div class="tags">${srcTag(i.src)}${statusTag(i.off)}</div></div>
+          <span class="amt">${money(i.cents)}</span>
+          <button class="btn small" data-pay="${i.id}" aria-label="Pay ${money(i.cents)} to ${i.shop}">Pay</button>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function renderConfirm(){
+  const p = S.lastPaid, n = nextDue();
+  document.getElementById('confH').textContent = `Paid ${money(p.cents)} to ${p.shop}`;
+  document.getElementById('confKv').innerHTML = totalOk()
+    ? `<div><span>New total</span><span>${money(sum(unpaid()))}</span></div>
+       <div><span>Next payment</span><span>${n ? `${money(n.cents)} · ${dateOf(n.off)}` : 'You’re all clear'}</span></div>`
+    : errorBox();
+}
+
+const screens = {home:renderHome, core:renderCore, confirm:renderConfirm};
+let current = 'home';
+function show(name){
+  current = name;
+  Object.keys(screens).forEach(k=>document.getElementById(k).hidden = k!==name);
+  document.getElementById('backBtn').hidden = name!=='core';
+  screens[name]();
+  const h = document.querySelector(`#${name} [tabindex="-1"]`); if(h) h.focus();
+}
+
+function pay(id){                       // FR6: instant update, no reload
+  const it = S.items.find(i=>i.id===id); if(!it || it.paid) return;
+  it.paid = true; S.ledger -= it.cents; S.updated = new Date(); S.lastPaid = it;
+  show('confirm');
+}
+
+document.getElementById('seeAll').onclick = () => show('core');
+document.getElementById('backBtn').onclick = () => show('home');
+document.getElementById('toHome').onclick = () => show('home');
+document.getElementById('coreList').addEventListener('click', e=>{
+  const b = e.target.closest('[data-pay]'); if(b) pay(b.dataset.pay);
+});
+document.getElementById('reset').onclick = () => { init(); show('home'); };
+document.getElementById('mismatch').onclick = () => { S.ledger += 1000; screens[current](); };
+
+init(); show('home');
+</script>
+</body>
+</html>
